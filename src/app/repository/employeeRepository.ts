@@ -4,7 +4,7 @@ import { Employee } from "../entities/Employee";
 export class EmployeeRepository{
     async getAllEmployees(){
         const employeeRepo = getConnection().getRepository(Employee);
-        return employeeRepo.find();
+        return employeeRepo.find({ relations: ['department']});
     }
 
     async getEmployeeById(id: string): Promise<Employee> {
@@ -28,6 +28,18 @@ export class EmployeeRepository{
         );
         return updateEmployeeDetails;
       }
-    
+      public async softDeleteEmployeeById(id: string) {
+        const employeeRepo = getConnection().getRepository(Employee);
+        return employeeRepo.softDelete({
+            id
+        });
+    } 
+
+    public async hardDeleteEmployeeById(id: string) {
+        const employeeRepo = getConnection().getRepository(Employee);
+        return employeeRepo.delete({
+            id
+        });
+    }
 
     }

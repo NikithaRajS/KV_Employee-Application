@@ -14,6 +14,8 @@ export class EmployeeService{
         return await this.employeeRepo.getEmployeeById(id);
       }
 
+
+
     public async createEmployee(employeeDetails: any) {
         try {
             const newEmployee = plainToClass(Employee, {
@@ -46,6 +48,10 @@ export class EmployeeService{
         } catch (err) {
           throw new HttpException(400, "Failed to create employee", "code-400");
         }
+      }
+
+      async deleteEmployeeById (id: string) {
+        return await this.employeeRepo.softDeleteEmployeeById(id);
       }
     
     }
