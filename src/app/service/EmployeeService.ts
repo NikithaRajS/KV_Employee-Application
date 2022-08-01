@@ -10,12 +10,15 @@ export class EmployeeService{
         return await this.employeeRepo.getAllEmployees()
     }
 
+    async getEmployeeById(id: string) {
+        return await this.employeeRepo.getEmployeeById(id);
+      }
+
     public async createEmployee(employeeDetails: any) {
         try {
             const newEmployee = plainToClass(Employee, {
                 name: employeeDetails.name,
                 joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
-                
                 role: employeeDetails.role,
                 departmentId: employeeDetails.department_id,
                 status:employeeDetails.status,

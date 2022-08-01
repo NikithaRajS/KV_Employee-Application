@@ -11,6 +11,7 @@ class EmployeeController extends AbstractController {
   }
   protected initializeRoutes() {
     this.router.get(`${this.path}`, this.employeeResponse);
+    this.router.get(`${this.path}/:id`, this.getEmployeeById);
     this.router.post(
         `${this.path}`,
         // validationMiddleware(CreateEmployeeDto, APP_CONSTANTS.body),
@@ -28,6 +29,24 @@ class EmployeeController extends AbstractController {
       return next(error);
     }
   }
+
+  private getEmployeeById = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data: any = await this.employeeService.getEmployeeById(
+        request.params.id
+      );
+      response.status(200);
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1)
+      );
+    } catch (error) {
+      return next(error);
+    }
+  };
 
   private createEmployee = async (
     request: RequestWithUser,
