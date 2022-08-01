@@ -11,6 +11,12 @@ class EmployeeController extends AbstractController {
   }
   protected initializeRoutes() {
     this.router.get(`${this.path}`, this.employeeResponse);
+    this.router.post(
+        `${this.path}`,
+        // validationMiddleware(CreateEmployeeDto, APP_CONSTANTS.body),
+        // this.asyncRouteHandler(this.createEmployee)
+        this.createEmployee
+      );
     
   }
   private employeeResponse = async (request: RequestWithUser, response: Response, next: NextFunction) => {
@@ -20,6 +26,21 @@ class EmployeeController extends AbstractController {
       response.send(this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1));
     } catch (error) {
       return next(error);
+    }
+  }
+
+  private createEmployee = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = await this.employeeService.createEmployee(request.body);
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK")
+      );
+    } catch (err) {
+      next(err);
     }
   }
 }
