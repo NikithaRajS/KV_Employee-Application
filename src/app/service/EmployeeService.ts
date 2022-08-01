@@ -37,7 +37,13 @@ export class EmployeeService{
     public async updateEmployeeById(id: string, employeeDetails: any) {
         try {
           const updatedEmployee = plainToClass(Employee, {
-            name: employeeDetails.name
+            name: employeeDetails.name,
+            joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
+            role: employeeDetails.role,
+            //departmentId: employeeDetails.department_id,
+            status:employeeDetails.status,
+            experience:employeeDetails.experience,
+            address:employeeDetails.address
             
           });
           const save = await this.employeeRepo.updateEmployeeDetails(

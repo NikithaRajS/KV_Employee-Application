@@ -18,7 +18,7 @@ class EmployeeController extends AbstractController {
         // this.asyncRouteHandler(this.createEmployee)
         this.createEmployee
       );
-      this.router.patch(`${this.path}/:id`, this.updateEmployeeById);
+      this.router.put(`${this.path}/:id`, this.updateEmployeeById);
       this.router.delete(`${this.path}/:id`,this.deleteEmployeeById)
     
   }

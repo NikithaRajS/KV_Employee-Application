@@ -23,7 +23,12 @@ export class EmployeeRepository{
           { id: employeeId, deletedAt: null },
           {
             name: employeeDetails.name ? employeeDetails.name : undefined,
-            
+            joining_date:employeeDetails.joining_date?employeeDetails.joining_date:undefined,
+            role: employeeDetails.role ? employeeDetails.role:undefined,
+            //departmentId: employeeDetails.department_id? employeeDetails.department_id:undefined,
+            status:employeeDetails.status?employeeDetails.status:undefined,
+            experience:employeeDetails.experience?employeeDetails.experience:undefined,
+            address:employeeDetails.address?employeeDetails.address:undefined
           }
         );
         return updateEmployeeDetails;
