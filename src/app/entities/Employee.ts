@@ -17,7 +17,7 @@ import { Department } from "./Department";
         @Column({ nullable: false })
         public experience: number;              
         @Column({ nullable: false })
-        public address: number;    
+        public address: string;    
 
         
         @ManyToOne(() => Department, { cascade: true })

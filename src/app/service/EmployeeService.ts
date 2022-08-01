@@ -14,10 +14,13 @@ export class EmployeeService{
         try {
             const newEmployee = plainToClass(Employee, {
                 name: employeeDetails.name,
-                //username: employeeDetails.username,
-                //age: employeeDetails.age,
-                departmentId: employeeDetails.departmentId,
-                //isActive: true,
+                joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
+                
+                role: employeeDetails.role,
+                departmentId: employeeDetails.department_id,
+                status:employeeDetails.status,
+                experience:employeeDetails.experience,
+                address:employeeDetails.address
             });
             const save = await this.employeeRepo.saveEmployeeDetails(newEmployee);
             return save;
