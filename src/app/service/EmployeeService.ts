@@ -32,6 +32,20 @@ export class EmployeeService{
         }
     }
    
-
+    public async updateEmployeeById(id: string, employeeDetails: any) {
+        try {
+          const updatedEmployee = plainToClass(Employee, {
+            name: employeeDetails.name
+            
+          });
+          const save = await this.employeeRepo.updateEmployeeDetails(
+            id,
+            updatedEmployee
+          );
+          return save;
+        } catch (err) {
+          throw new HttpException(400, "Failed to create employee", "code-400");
+        }
+      }
     
     }

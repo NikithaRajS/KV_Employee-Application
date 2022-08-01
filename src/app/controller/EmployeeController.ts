@@ -18,6 +18,7 @@ class EmployeeController extends AbstractController {
         // this.asyncRouteHandler(this.createEmployee)
         this.createEmployee
       );
+      this.router.patch(`${this.path}/:id`, this.updateEmployeeById);
     
   }
   private employeeResponse = async (request: RequestWithUser, response: Response, next: NextFunction) => {
@@ -62,6 +63,25 @@ class EmployeeController extends AbstractController {
       next(err);
     }
   }
+
+  private updateEmployeeById = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data: any = await this.employeeService.updateEmployeeById(
+        request.params.id,
+        request.body
+      );
+      response.status(200);
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1)
+      );
+    } catch (error) {
+      return next(error);
+    }
+  };
 }
 
 export default EmployeeController;

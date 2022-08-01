@@ -6,7 +6,7 @@ export class EmployeeRepository{
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.find();
     }
-    
+
     async getEmployeeById(id: string): Promise<Employee> {
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.findOne(id);
@@ -16,5 +16,18 @@ export class EmployeeRepository{
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.save(employeeDetails);
     }
+
+    public async updateEmployeeDetails(employeeId: string, employeeDetails: any) {
+        const employeeRepo = getConnection().getRepository(Employee);
+        const updateEmployeeDetails = await employeeRepo.update(
+          { id: employeeId, deletedAt: null },
+          {
+            name: employeeDetails.name ? employeeDetails.name : undefined,
+            
+          }
+        );
+        return updateEmployeeDetails;
+      }
+    
 
     }
