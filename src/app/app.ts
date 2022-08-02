@@ -6,6 +6,7 @@ import express from "express";
 import { Controller } from "./util/rest/controller";
 import RequestWithUser from "./util/rest/request";
 import cors = require("cors");
+import errorMiddleware from "./middleware/errorMiddleware";
 /**
  * Express application wrapper class to centralize initialization
  */
@@ -21,6 +22,7 @@ class App extends EventEmitter {
 
     this.initializeMiddlewares();
     this.initializeControllers(controllers);
+    this.initializeErrorHAndling()
   }
 
   /**
@@ -57,6 +59,8 @@ class App extends EventEmitter {
     });
   } 
 
+  
+
   /**
    * Iterates through controllers in services/index and adds their routes/handlers to app
    * @param controllers
@@ -65,6 +69,11 @@ class App extends EventEmitter {
     controllers.forEach((controller) => {
       this.app.use("/", controller.router);
     });
+  }
+
+  private initializeErrorHAndling(){
+    this.app.use(errorMiddleware)
+
   }
 
 }

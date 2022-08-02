@@ -5,6 +5,7 @@ import * as express from "express";
 import HttpException from "../exception/HttpException";
 import APP_CONSTANTS from "../constants";
 import { ErrorCodes } from "../util/errorCode";
+import { request } from "http";
 
 
 /**
@@ -13,15 +14,24 @@ import { ErrorCodes } from "../util/errorCode";
  */
 function validationMiddleware<T>(type: any, parameter: string, skipMissingProperties = false): express.RequestHandler {
   return (req, res, next) => {
-    const requestBody = plainToClass(type, req.body);
+    let validatedData:any;
+    if(parameter === 'body'){
+      validatedData=plainToClass(type,req.body)
+    }
+    else if(parameter === 'params'){
+      validatedData=plainToClass(type,req.params)
+    }
+    // const requestBody = plainToClass(type, req.body);
     validate(
-      requestBody, { skipMissingProperties, forbidUnknownValues: true, whitelist: true })
+      validatedData, { skipMissingProperties, forbidUnknownValues: true, whitelist: true })
       .then((errors: ValidationError[]) => {
         if (errors.length > 0) {
           const errorDetail = ErrorCodes.VALIDATION_ERROR;
-          next(errors);
+          next(new HttpException(400,errorDetail.MESSAGE,errorDetail.CODE,errors));
+          //next(errors)- // Will call error middleware
         } else {
-            req.body = requestBody;
+            if (parameter === 'body')
+              req.body=validatedData
           next();
         }
       });

@@ -5,6 +5,7 @@ import APP_CONSTANTS from "../constants";
 import { EmployeeService } from "../service/EmployeeService";
 import validationMiddleware from "../middleware/validationMiddleware";
 import { CreateEmployeeDto } from "../dto/createEmployee";
+import { IsUUIDDto } from "../dto/idCheckDto";
 
 class EmployeeController extends AbstractController {
   constructor(private employeeService:EmployeeService) {
@@ -21,6 +22,7 @@ class EmployeeController extends AbstractController {
         this.createEmployee
       );
       this.router.put(`${this.path}/:id`, 
+      validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
       validationMiddleware(CreateEmployeeDto,APP_CONSTANTS.body),
       this.updateEmployeeById);
       

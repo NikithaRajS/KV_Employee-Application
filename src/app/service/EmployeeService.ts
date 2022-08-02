@@ -22,7 +22,7 @@ export class EmployeeService{
                 name: employeeDetails.name,
                 joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
                 role: employeeDetails.role,
-                departmentId: employeeDetails.department_id,
+                departmentId: employeeDetails.departmentId,
                 status:employeeDetails.status,
                 experience:employeeDetails.experience,
                 address:employeeDetails.address,
