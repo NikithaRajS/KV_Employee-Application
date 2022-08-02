@@ -3,6 +3,8 @@ import { NextFunction, Response } from "express";
 import RequestWithUser from "../util/rest/request";
 import APP_CONSTANTS from "../constants";
 import { DepartmentService } from "../service/DepartmentService";
+import validationMiddleware from "../middleware/validationMiddleware";
+import { CreateDepartmentDto } from "../dto/createDepartment";
 
 class DepartmentController extends AbstractController {
   constructor(private departmentService:DepartmentService) {
@@ -14,8 +16,8 @@ class DepartmentController extends AbstractController {
     this.router.get(`${this.path}/:id`, this.getDepartmentById);
     this.router.post(
         `${this.path}`,
-        // validationMiddleware(CreateEmployeeDto, APP_CONSTANTS.body),
         // this.asyncRouteHandler(this.createEmployee)
+        validationMiddleware(CreateDepartmentDto,APP_CONSTANTS.body),
         this.createDepartment
       );
       this.router.put(`${this.path}/:id`, this.updateDepartmentById);
