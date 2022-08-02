@@ -6,6 +6,8 @@ import { EmployeeService } from "../service/EmployeeService";
 import validationMiddleware from "../middleware/validationMiddleware";
 import { CreateEmployeeDto } from "../dto/createEmployee";
 import { IsUUIDDto } from "../dto/idCheckDto";
+import authorize from "../middleware/authorization";
+
 
 class EmployeeController extends AbstractController {
   constructor(private employeeService:EmployeeService) {
@@ -13,8 +15,12 @@ class EmployeeController extends AbstractController {
     this.initializeRoutes();
   }
   protected initializeRoutes() {
-    this.router.get(`${this.path}`, this.employeeResponse);
+    this.router.get(`${this.path}`,authorize(['admin','superadmin']),this.employeeResponse);
     this.router.get(`${this.path}/:id`, this.getEmployeeById);
+    this.router.post(
+      `${this.path}/login`,
+      this.login
+    );
     this.router.post(
         `${this.path}`,
         validationMiddleware(CreateEmployeeDto,APP_CONSTANTS.body),
@@ -54,6 +60,25 @@ class EmployeeController extends AbstractController {
       );
     } catch (error) {
       return next(error);
+    }
+  };
+
+
+  private login = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
+    try{
+    const loginData = request.body;
+    const loginDetail = await this.employeeService.employeeLogin(
+      loginData.name,
+      loginData.password
+    );
+    response.send(
+      this.fmt.formatResponse(loginDetail, Date.now() - request.startTime, "OK")
+    );}catch(err){
+      return next
     }
   };
 

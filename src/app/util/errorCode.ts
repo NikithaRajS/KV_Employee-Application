@@ -1,3 +1,5 @@
+import { EntityNotFoundError } from "typeorm";
+
 /**
  * Custom error codes to be send to UI to display proper a response
  */
@@ -17,6 +19,15 @@ export const ErrorCodes: { [key: string]: CustomError } = {
     VALIDATION_ERROR: {
         CODE: "VALIDATION_ERROR",
         MESSAGE: "Validation failed error",
+    },
+    EMPLOYEE_NOT_FOUND:{
+        CODE:"EMPLOYEE_NOT_FOUND",
+        MESSAGE:"Employee Validation error"
+
+    },
+    INCORRECT_PASSWORD:{
+        CODE:"INCORRECT_PASSWORD",
+        MESSAGE:"Incorrect password"
     }
 };
 

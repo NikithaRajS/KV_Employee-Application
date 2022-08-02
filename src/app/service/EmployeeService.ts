@@ -1,7 +1,14 @@
 import { plainToClass } from "class-transformer";
+import { EntityNotFoundError } from "typeorm";
 import { Employee } from "../entities/Employee";
+import EntityNotFoundException from "../exception/EntityNotFoundException";
 import HttpException from "../exception/HttpException";
 import { EmployeeRepository } from "../repository/employeeRepository";
+import { ErrorCodes } from "../util/errorCode";
+import bcrypt from "bcrypt";
+import UserNotAuthorizedException from "../exception/UserNotAuthorizedException";
+import IncorrectUsernameOrPasswordException from "../exception/IncorrectUsernameOrPasswordException";
+import jsonwebtoken from "jsonwebtoken"
 
 export class EmployeeService{
     constructor(private employeeRepo:EmployeeRepository){
@@ -11,10 +18,44 @@ export class EmployeeService{
     }
 
     async getEmployeeById(id: string) {
-        return await this.employeeRepo.getEmployeeById(id);
+        const employee=await this.employeeRepo.getEmployeeById(id);
+        if(!employee){
+          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
+        }
       }
 
+      public employeeLogin = async (
+        name: string,
+        password: string
+      ) => {
+        const employeeDetails = await this.employeeRepo.getEmployeeByName(
+          name
+        );
+        if (!employeeDetails) {
+          throw new UserNotAuthorizedException();
+        }
+        const validPassword = await bcrypt.compare(password, employeeDetails.password);
+        if (validPassword) {
+          let payload = {
+            "custom:id": employeeDetails.id,
+            "custom:name": employeeDetails.name,
+            "role":employeeDetails.role
+          };
+          const token = this.generateAuthTokens(payload);
 
+          return {
+            idToken: token,
+            employeeDetails,
+          };
+        } else {
+          throw new IncorrectUsernameOrPasswordException(ErrorCodes.INCORRECT_PASSWORD);
+        }
+      };
+
+     private generateAuthTokens = (payload: any) => {
+        return jsonwebtoken.sign(payload, process.env.JWT_TOKEN_SECRET, {
+          expiresIn: process.env.ID_TOKEN_VALIDITY,
+        })}
 
     public async createEmployee(employeeDetails: any) {
         try {
@@ -27,7 +68,7 @@ export class EmployeeService{
                 experience:employeeDetails.experience,
                 address:employeeDetails.address,
                 username:employeeDetails.username,
-                password:employeeDetails.password
+                password:employeeDetails.password ? await bcrypt.hash(employeeDetails.password,10):''
             });
             const save = await this.employeeRepo.saveEmployeeDetails(newEmployee);
             return save;

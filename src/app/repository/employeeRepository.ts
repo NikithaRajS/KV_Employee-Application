@@ -12,6 +12,14 @@ export class EmployeeRepository{
         return employeeRepo.findOne(id);
       }
 
+      public async getEmployeeByName(userName: string) {
+        const employeeRepo = getConnection().getRepository(Employee);
+        const employeeDetail = await employeeRepo.findOne({
+            where: { name: userName },
+        });console.log(employeeDetail)
+        return employeeDetail;
+    }
+
     public async saveEmployeeDetails(employeeDetails: Employee) {
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.save(employeeDetails);
@@ -21,15 +29,7 @@ export class EmployeeRepository{
         const employeeRepo = getConnection().getRepository(Employee);
         const updateEmployeeDetails = await employeeRepo.update(
           { id: employeeId, deletedAt: null },
-          {
-            name: employeeDetails.name ? employeeDetails.name : undefined,
-            joining_date:employeeDetails.joining_date?employeeDetails.joining_date:undefined,
-            role: employeeDetails.role ? employeeDetails.role:undefined,
-            //departmentId: employeeDetails.department_id? employeeDetails.department_id:undefined,
-            status:employeeDetails.status?employeeDetails.status:undefined,
-            experience:employeeDetails.experience?employeeDetails.experience:undefined,
-            address:employeeDetails.address?employeeDetails.address:undefined
-          }
+          employeeDetails
         );
         return updateEmployeeDetails;
       }

@@ -23,7 +23,7 @@ function validationMiddleware<T>(type: any, parameter: string, skipMissingProper
     }
     // const requestBody = plainToClass(type, req.body);
     validate(
-      validatedData, { skipMissingProperties, forbidUnknownValues: true, whitelist: true })
+      validatedData, { skipMissingProperties, forbidUnknownValues: true, whitelist: false })
       .then((errors: ValidationError[]) => {
         if (errors.length > 0) {
           const errorDetail = ErrorCodes.VALIDATION_ERROR;
