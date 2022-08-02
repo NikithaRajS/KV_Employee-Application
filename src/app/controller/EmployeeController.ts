@@ -24,7 +24,6 @@ class EmployeeController extends AbstractController {
     this.router.post(
         `${this.path}`,
         validationMiddleware(CreateEmployeeDto,APP_CONSTANTS.body),
-        // this.asyncRouteHandler(this.createEmployee)
         this.createEmployee
       );
       this.router.put(`${this.path}/:id`, 
