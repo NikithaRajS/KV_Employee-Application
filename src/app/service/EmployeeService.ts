@@ -25,12 +25,15 @@ export class EmployeeService{
                 departmentId: employeeDetails.department_id,
                 status:employeeDetails.status,
                 experience:employeeDetails.experience,
-                address:employeeDetails.address
+                address:employeeDetails.address,
+                username:employeeDetails.username,
+                password:employeeDetails.password
             });
             const save = await this.employeeRepo.saveEmployeeDetails(newEmployee);
             return save;
         } catch (err) {
            // throw new HttpException(400, "Failed to create employee");
+           throw err;
         }
     }
    

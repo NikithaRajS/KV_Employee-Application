@@ -43,7 +43,7 @@ class App extends EventEmitter {
    * Adds desired middleware to app
    */
   private initializeMiddlewares() {
-    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.json());  //Application level middleware used for parsing the request body
     this.app.use(cookieParser());
     this.app.use(compression());
     this.app.use(express.static('public'));
@@ -52,6 +52,7 @@ class App extends EventEmitter {
     // use for computing processing time on response
     this.app.use((request: RequestWithUser, response: express.Response, next: express.NextFunction) => {
       request.startTime = Date.now();
+      //console.log(request.startTime)
       next();
     });
   } 

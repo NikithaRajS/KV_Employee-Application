@@ -33,7 +33,7 @@ export class EmployeeRepository{
         );
         return updateEmployeeDetails;
       }
-      public async softDeleteEmployeeById(id: string) {
+    public async softDeleteEmployeeById(id: string) {
         const employeeRepo = getConnection().getRepository(Employee);
         return employeeRepo.softDelete({
             id
