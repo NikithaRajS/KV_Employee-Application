@@ -19,7 +19,6 @@ export class EmployeeService{
 
     async getEmployeeById(id: string) {
         const employee= await this.employeeRepo.getEmployeeById(id);
-
         if(!employee){
           throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
         }
@@ -86,8 +85,8 @@ export class EmployeeService{
           return save;
         } 
         catch (err) {
-           // throw new HttpException(400, "Failed to create employee");
-           throw err;
+           throw new HttpException(400, "Failed to create employee","Code-400")
+           //t//hrow err;
         }
     }
    

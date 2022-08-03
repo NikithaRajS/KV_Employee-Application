@@ -25,6 +25,11 @@ export const ErrorCodes: { [key: string]: CustomError } = {
         MESSAGE:"Employee Validation error"
 
     },
+    DEPARTMENT_NOT_FOUND:{
+        CODE:"DEPARTMENT_NOT_FOUND",
+        MESSAGE:"Department Validation error"
+
+    },
     INCORRECT_PASSWORD:{
         CODE:"INCORRECT_PASSWORD",
         MESSAGE:"Incorrect password"
