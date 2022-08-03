@@ -18,13 +18,16 @@ export class EmployeeService{
     }
 
     async getEmployeeById(id: string) {
-        const employee=await this.employeeRepo.getEmployeeById(id);
+        const employee= await this.employeeRepo.getEmployeeById(id);
+
         if(!employee){
           throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
         }
+
+        return employee
       }
 
-      public employeeLogin = async (
+    public employeeLogin = async (
         name: string,
         password: string
       ) => {
@@ -79,15 +82,21 @@ export class EmployeeService{
     }
    
     public async updateEmployeeById(id: string, employeeDetails: any) {
+        const employee= await this.employeeRepo.getEmployeeById(id);
+        if(!employee){
+          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
+        }
         try {
           const updatedEmployee = plainToClass(Employee, {
-            name: employeeDetails.name,
-            joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
-            role: employeeDetails.role,
-            //departmentId: employeeDetails.department_id,
-            status:employeeDetails.status,
-            experience:employeeDetails.experience,
-            address:employeeDetails.address
+            name: employeeDetails.name ? employeeDetails.name:employee.name,
+            joining_date: employeeDetails.joining_date? employeeDetails.joining_date:employee.joining_date,       //Second name should be that of the json key,first name is the column name
+            role: employeeDetails.role?employeeDetails.role:employee.role,
+            departmentId: employeeDetails.department_id?employeeDetails.department_id:employee.departmentId,
+            status:employeeDetails.status ? employeeDetails.status:employee.status,
+            experience:employeeDetails.experience?employeeDetails.experience:employee.experience,
+            address:employeeDetails.address?employeeDetails.address:employee.address,
+            username:employeeDetails.username?employeeDetails.username:employee.username,
+            password:employeeDetails.password?employeeDetails.password:employee.password
             
           });
           const save = await this.employeeRepo.updateEmployeeDetails(
@@ -101,6 +110,10 @@ export class EmployeeService{
       }
 
       async deleteEmployeeById (id: string) {
+        const employee= await this.employeeRepo.getEmployeeById(id);
+        if(!employee){
+          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
+        }
         return await this.employeeRepo.softDeleteEmployeeById(id);
       }
     
