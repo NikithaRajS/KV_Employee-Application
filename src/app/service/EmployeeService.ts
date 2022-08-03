@@ -3,7 +3,7 @@ import { EntityNotFoundError } from "typeorm";
 import { Employee } from "../entities/Employee";
 import EntityNotFoundException from "../exception/EntityNotFoundException";
 import HttpException from "../exception/HttpException";
-import { EmployeeRepository } from "../repository/employeeRepository";
+import { EmployeeRepository } from "../repository/EmployeeRepository";
 import { ErrorCodes } from "../util/errorCode";
 import bcrypt from "bcrypt";
 import UserNotAuthorizedException from "../exception/UserNotAuthorizedException";

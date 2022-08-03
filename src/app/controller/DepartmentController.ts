@@ -5,34 +5,58 @@ import APP_CONSTANTS from "../constants";
 import { DepartmentService } from "../service/DepartmentService";
 import validationMiddleware from "../middleware/validationMiddleware";
 import { CreateDepartmentDto } from "../dto/createDepartment";
+import { IsUUIDDto } from "../dto/idCheckDto";
+import authorize from "../middleware/authorization";
+import { UpdateDepartmentDto } from "../dto/updateDepartment";
+import { Department } from "../entities/Department";
 
 class DepartmentController extends AbstractController {
-  constructor(private departmentService:DepartmentService) {
+  constructor(private departmentService: DepartmentService) {
     super(`${APP_CONSTANTS.apiPrefix}/department`);
     this.initializeRoutes();
   }
   protected initializeRoutes() {
-    this.router.get(`${this.path}`, this.departmentResponse);
-    this.router.get(`${this.path}/:id`, this.getDepartmentById);
+    this.router.get(`${this.path}`, this.getAlldepartments);
+    this.router.get(
+      `${this.path}/:id`,
+      validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
+      this.getDepartmentById
+    );
     this.router.post(
-        `${this.path}`,
-        // this.asyncRouteHandler(this.createEmployee)
-        validationMiddleware(CreateDepartmentDto,APP_CONSTANTS.body),
-        this.createDepartment
-      );
-      this.router.put(`${this.path}/:id`, this.updateDepartmentById);
-      this.router.delete(`${this.path}/:id`,this.deleteDepartmentById)
-    
+      `${this.path}`,
+      authorize(["admin", "superadmin"]),
+      validationMiddleware(CreateDepartmentDto, APP_CONSTANTS.body),
+      this.createDepartment
+    );
+    this.router.put(
+      `${this.path}/:id`,
+      validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
+      validationMiddleware(UpdateDepartmentDto, APP_CONSTANTS.body),
+      authorize(["admin", "superadmin"]),
+      this.updateDepartmentById
+    );
+    this.router.delete(
+      `${this.path}/:id`,
+      validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
+      authorize(["admin", "superadmin"]),
+      this.deleteDepartmentById
+    );
   }
-  private departmentResponse = async (request: RequestWithUser, response: Response, next: NextFunction) => {
+  private getAlldepartments = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
     try {
-      const data: any = await this.departmentService.getAllDepartments()
+      const data: Department[] = await this.departmentService.getAllDepartments();
       response.status(200);
-      response.send(this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1));
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1)
+      );
     } catch (error) {
       return next(error);
     }
-  }
+  };
 
   private getDepartmentById = async (
     request: RequestWithUser,
@@ -65,7 +89,7 @@ class DepartmentController extends AbstractController {
     } catch (err) {
       next(err);
     }
-  }
+  };
 
   private updateDepartmentById = async (
     request: RequestWithUser,
@@ -102,7 +126,7 @@ class DepartmentController extends AbstractController {
     } catch (error) {
       return next(error);
     }
-  }
+  };
 }
 
 export default DepartmentController;

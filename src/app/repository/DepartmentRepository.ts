@@ -1,4 +1,4 @@
-import { getConnection } from "typeorm";
+import { DeepPartial, getConnection } from "typeorm";
 import { Department } from "../entities/Department";
 
 export class DepartmentRepository{
@@ -12,12 +12,12 @@ export class DepartmentRepository{
         return departmentRepo.findOne(id);
       }
 
-    public async saveDepartmentDetails(departmentDetails: Department) {
+    public async saveDepartmentDetails(departmentDetails: Department): Promise<Department> {
         const departmentRepo = getConnection().getRepository(Department);
         return departmentRepo.save(departmentDetails);
     }
 
-    public async updateDepartmentDetails(departmentId: string, departmentDetails: any) {
+    public async updateDepartmentDetails(departmentId: string, departmentDetails: DeepPartial<Department>) {
         const departmentRepo = getConnection().getRepository(Department);
         const updateEmployeeDetails = await departmentRepo.update(
           { id: departmentId, deletedAt: null },

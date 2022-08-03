@@ -1,8 +1,8 @@
 /**
  * Wraps Controllers for easy import from other modules
  */
-import { DepartmentRepository } from "../repository/departmentRepository";
-import { EmployeeRepository } from "../repository/employeeRepository";
+import { DepartmentRepository } from "../repository/DepartmentRepository";
+import { EmployeeRepository } from "../repository/EmployeeRepository";
 import { DepartmentService } from "../service/DepartmentService";
 import { EmployeeService } from "../service/EmployeeService";
 import DepartmentController from "./DepartmentController";

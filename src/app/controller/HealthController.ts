@@ -11,15 +11,21 @@ class HealthController extends AbstractController {
   protected initializeRoutes() {
     this.router.get(`${this.path}`, this.healthResponse);
   }
-  private healthResponse = async (request: RequestWithUser, response: Response, next: NextFunction) => {
+  private healthResponse = async (
+    request: RequestWithUser,
+    response: Response,
+    next: NextFunction
+  ) => {
     try {
-      const data: any = { message: "Service Up"};
+      const data: any = { message: "Service Up" };
       response.status(200);
-      response.send(this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1));
+      response.send(
+        this.fmt.formatResponse(data, Date.now() - request.startTime, "OK", 1)
+      );
     } catch (error) {
       return next(error);
     }
-  }
+  };
 }
 
 export default HealthController;

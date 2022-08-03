@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { Department } from "../entities/Department";
 import HttpException from "../exception/HttpException";
-import { DepartmentRepository } from "../repository/departmentRepository";
+import { DepartmentRepository } from "../repository/DepartmentRepository";
 
 export class DepartmentService{
     constructor(private departmentRepo:DepartmentRepository){
