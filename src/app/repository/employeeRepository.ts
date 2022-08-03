@@ -9,7 +9,7 @@ export class EmployeeRepository{
 
     async getEmployeeById(id: string): Promise<Employee> {
         const employeeRepo = getConnection().getRepository(Employee);
-        return employeeRepo.findOne(id);
+        return employeeRepo.findOne({where:{id},relations:['address']});
       }
 
       public async getEmployeeByName(userName: string) {
@@ -27,17 +27,16 @@ export class EmployeeRepository{
 
     public async updateEmployeeDetails(employeeId: string, employeeDetails: any) {
         const employeeRepo = getConnection().getRepository(Employee);
-        const updateEmployeeDetails = await employeeRepo.update(
-          { id: employeeId, deletedAt: null },
+        employeeDetails.id = employeeId;
+        console.log(employeeDetails);
+        const updateEmployeeDetails = await employeeRepo.save(
           employeeDetails
         );
         return updateEmployeeDetails;
       }
-    public async softDeleteEmployeeById(id: string) {
+    public async softDeleteEmployeeById(employee: Employee) {
         const employeeRepo = getConnection().getRepository(Employee);
-        return employeeRepo.softDelete({
-            id
-        });
+        return employeeRepo.softRemove(employee);
     } 
 
     public async hardDeleteEmployeeById(id: string) {

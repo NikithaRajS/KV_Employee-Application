@@ -1,4 +1,7 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CreateAddressDto } from "./createAddress";
+import { UpdateAddressDto } from "./updateAdress";
 
 export class UpdateEmployeeDto {
     @IsOptional()
@@ -17,10 +20,7 @@ export class UpdateEmployeeDto {
     @IsOptional()
     public status:string;
 
-    @IsString()
-    @IsOptional()
-    public address:string;
-
+   
     @IsString()
     @IsOptional()
     public username: string;
@@ -36,6 +36,12 @@ export class UpdateEmployeeDto {
     @IsString()
     @IsOptional()
     public password:string;
+
+
+    @IsOptional()
+    @ValidateNested({each:true})
+    @Type(()=>UpdateAddressDto)
+    public address:UpdateAddressDto
 
 
 }

@@ -62,20 +62,30 @@ export class EmployeeService{
 
     public async createEmployee(employeeDetails: any) {
         try {
-            const newEmployee = plainToClass(Employee, {
+          
+          const newAddress = plainToClass(Employee, {
+            line1:employeeDetails.address.line1,
+            line2:employeeDetails.address.line2,
+            city:employeeDetails.address.city,
+            state:employeeDetails.address.state,
+            zipcode:employeeDetails.address.zipcode
+
+        });
+          const newEmployee = plainToClass(Employee, {
                 name: employeeDetails.name,
-                joining_date: employeeDetails.joining_date,        //Second name should be that of the json key,first name is the column name
+                joining_date: employeeDetails.joining_date,                                                                       //Second name should be that of the json key,first name is the column name
                 role: employeeDetails.role,
                 departmentId: employeeDetails.departmentId,
                 status:employeeDetails.status,
                 experience:employeeDetails.experience,
-                address:employeeDetails.address,
+                address:newAddress,
                 username:employeeDetails.username,
                 password:employeeDetails.password ? await bcrypt.hash(employeeDetails.password,10):''
-            });
-            const save = await this.employeeRepo.saveEmployeeDetails(newEmployee);
-            return save;
-        } catch (err) {
+          });
+          const save = await this.employeeRepo.saveEmployeeDetails(newEmployee);
+          return save;
+        } 
+        catch (err) {
            // throw new HttpException(400, "Failed to create employee");
            throw err;
         }
@@ -110,11 +120,11 @@ export class EmployeeService{
       }
 
       async deleteEmployeeById (id: string) {
-        const employee= await this.employeeRepo.getEmployeeById(id);
+        const employee = await this.employeeRepo.getEmployeeById(id);
         if(!employee){
           throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
         }
-        return await this.employeeRepo.softDeleteEmployeeById(id);
+        return await this.employeeRepo.softDeleteEmployeeById(employee);
       }
     
     }

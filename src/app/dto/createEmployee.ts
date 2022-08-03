@@ -1,4 +1,6 @@
-import { IsNumber, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsNumber, IsString, ValidateNested } from "class-validator";
+import { CreateAddressDto } from "./createAddress";
 
 export class CreateEmployeeDto {
     @IsString()
@@ -13,8 +15,6 @@ export class CreateEmployeeDto {
     @IsString()
     public status:string;
 
-    @IsString()
-    public address:string;
 
     @IsString()
     public username: string;
@@ -27,6 +27,10 @@ export class CreateEmployeeDto {
 
     @IsString()
     public password:string;
+
+    @ValidateNested({each:true})
+    @Type(()=>CreateAddressDto)
+    public address:CreateAddressDto
 
 
 }

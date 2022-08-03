@@ -31,7 +31,7 @@ class EmployeeController extends AbstractController {
     this.router.post(
         `${this.path}`,
         validationMiddleware(CreateEmployeeDto,APP_CONSTANTS.body),
-        authorize(['admin','superadmin']),
+        //authorize(['admin','superadmin']),
         this.createEmployee
     );
          
@@ -39,10 +39,12 @@ class EmployeeController extends AbstractController {
       this.router.put(`${this.path}/:id`, 
       validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
       validationMiddleware(UpdateEmployeeDto,APP_CONSTANTS.body),
-      authorize(['admin','superadmin']),
+      //authorize(['admin','superadmin']),
       this.updateEmployeeById );
   
-      this.router.delete(`${this.path}/:id`,  validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),authorize(['admin','superadmin']),this.deleteEmployeeById)
+      this.router.delete(`${this.path}/:id`,  validationMiddleware(IsUUIDDto, APP_CONSTANTS.params),
+      //authorize(['admin','superadmin']),
+      this.deleteEmployeeById)
     
   }
   private getAllEmployees = async (request: RequestWithUser, response: Response, next: NextFunction) => {

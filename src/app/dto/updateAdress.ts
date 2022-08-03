@@ -1,6 +1,11 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
+import { IsUUIDDto } from "./idCheckDto";
 
-export class CreateAddressDto {
+export class UpdateAddressDto {
+    @IsString()
+    @IsOptional()
+    public id: string;
+
     @IsString()
     @IsOptional()
     public line1: string;
