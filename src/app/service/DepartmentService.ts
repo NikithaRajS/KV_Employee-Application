@@ -53,6 +53,10 @@ export class DepartmentService{
       }
 
       async deleteDepartmentById (id: string) {
+        const department = await this.departmentRepo.getDepartmentById(id);
+        if(!department){
+          throw new EntityNotFoundException(ErrorCodes.EMPLOYEE_NOT_FOUND)
+        }
         return await this.departmentRepo.softDeleteDepartmentById(id);
       }
     
